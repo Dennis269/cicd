@@ -1,4 +1,5 @@
 import pytest
+import json
 from app import app
 
 @pytest.fixture
@@ -15,4 +16,11 @@ def test_hello(client):
 def test_version(client):
     response = client.get('/version')
     assert response.status_code == 200
-    assert b"Version 1.0" in response.data
+    assert b"Version 2.0" in response.data
+
+def test_info(client):
+    response = client.get('/info')
+    assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data["app"] == "CICD Demo"
+    assert data["version"] == "2.0"
